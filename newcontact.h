@@ -19,7 +19,6 @@ public:
 
 private slots:
     void on_save_button_clicked();
-
     void on_cancel_button_clicked();
 
 private:
@@ -28,6 +27,7 @@ private:
     std::string email{"john@doe.com"};
     long long phone{};
     Contacts *cache;
+
 };
 
 #endif // NEWCONTACT_H

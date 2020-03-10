@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>editcontact</class>
- <widget class="QDialog" name="editcontact">
+ <class>NewContact</class>
+ <widget class="QDialog" name="NewContact">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -10,19 +10,25 @@
     <height>300</height>
    </rect>
   </property>
+  <property name="maximumSize">
+   <size>
+    <width>400</width>
+    <height>300</height>
+   </size>
+  </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>New Contact</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <spacer name="verticalSpacer">
+    <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>15</height>
+       <height>40</height>
       </size>
      </property>
     </spacer>
@@ -33,7 +39,7 @@
       <string notr="true">font: 75 24pt &quot;MS Shell Dlg 2&quot;;</string>
      </property>
      <property name="text">
-      <string>Edit Contact</string>
+      <string>Add New Contact</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -41,14 +47,14 @@
     </widget>
    </item>
    <item>
-    <spacer name="verticalSpacer_2">
+    <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>24</height>
+       <height>40</height>
       </size>
      </property>
     </spacer>
@@ -99,7 +105,7 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>33</height>
+       <height>40</height>
       </size>
      </property>
     </spacer>

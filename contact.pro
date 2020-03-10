@@ -16,16 +16,21 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    data_store.cpp \
+    editcontact.cpp \
     main.cpp \
     contacts.cpp \
     newcontact.cpp
 
 HEADERS += \
     contacts.h \
+    data_store.h \
+    editcontact.h \
     newcontact.h
 
 FORMS += \
     contacts.ui \
+    editcontact.ui \
     newcontact.ui
 
 # Default rules for deployment.

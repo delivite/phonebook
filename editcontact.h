@@ -2,6 +2,7 @@
 #define EDITCONTACT_H
 
 #include <QDialog>
+#include "contacts.h"
 
 namespace Ui {
 class editcontact;
@@ -15,8 +16,19 @@ public:
     explicit editcontact(QWidget *parent = nullptr);
     ~editcontact();
 
+private slots:
+    void on_save_button_clicked();
+
+    void on_cancel_button_clicked();
+
+private:
+    void fill_data();
 private:
     Ui::editcontact *ui;
+    Contacts *contact;
+    QString name{contact->current_name()};
+
+
 };
 
 #endif // EDITCONTACT_H
