@@ -1,7 +1,7 @@
 #include <iostream>
 #include <QMessageBox>
 #include <QDoubleValidator>
-
+#include <map>
 #include "newcontact.h"
 #include "ui_newcontact.h"
 
@@ -16,40 +16,31 @@ NewContact::NewContact(QWidget *parent) :
 
 NewContact::~NewContact()
 {
+    //delete contact;
     delete ui;
 }
 
 void NewContact::on_save_button_clicked()
 {
+    QString name;
+    long long phone;
+    QString email;
     if(!(ui->phone_edit->text().isEmpty())){
          /* Phone field cannot be empty.
           * If it is, prompt the user to input a phone number
          */
          if((ui->name_edit->text().isEmpty())){
              /*If name field is empty, use the phone number as the name key*/
-             name = ui->phone_edit->text().toStdString();
+             name = ui->phone_edit->text();
          }else{
-             name = ui->name_edit->text().toStdString();
+             name = ui->name_edit->text();
          }
-         to_camel_case(name);
+         //to_camel_case(name.toStdString());
 
          phone = ui->phone_edit->text().toLongLong();
-         if(cache->st[name]){
-         QMessageBox::StandardButtons change;
-         change = QMessageBox::warning(this, "Exists", "This contact is already here. Do you want to replace it?", QMessageBox::Yes|QMessageBox::No);
-         if (change==QMessageBox::Yes){
-             cache->st.erase(name);
-             cache->st[name] = phone;
-             QMessageBox::information(this,"Success", "Contact change successful!",QMessageBox::Ok);
-             close();
-         }
-         }else{
-         cache->st[name]=phone;
-         QMessageBox::information(this,"Success", "Saved!",QMessageBox::Ok);
-         cache->insert(name);
+         email = ui->email_edit->text();
+         contact.save_data(name, phone, email);
          close();
-         }
-
 
      }else{
          QMessageBox::critical(this,"Can't Do It!", "Phone Field Cannot Be Empty!");

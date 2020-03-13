@@ -26,7 +26,7 @@ private:
 private:
     Ui::editcontact *ui;
     Contacts *contact;
-    QString name{contact->current_name()};
+    QString name;
 
 
 };

@@ -2,10 +2,15 @@
 #define CONTACTS_H
 
 #include <QMainWindow>
+#include <QListWidgetItem>
+#include <person.h>
+#include "datastore.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Contacts; }
 QT_END_NAMESPACE
+
 
 class Contacts : public QMainWindow
 {
@@ -14,14 +19,13 @@ class Contacts : public QMainWindow
 public:
     Contacts(QWidget *parent = nullptr);
     ~Contacts();
-    std::map<std::string, long long> st;
-    void insert (std::string key);
+    void save_data(QString name, long long phone, QString email);
     void edit(std::string);        
     void remove_name(std::string name);
-    QString current_name()const;
-
-
-
+    bool contains(QString key);
+    long long get_phone(QString name);
+    QString get_email(QString name);
+    QListWidgetItem* current_name()const;
 
 private slots:
     void on_new_contact_clicked();
@@ -32,13 +36,20 @@ private slots:
 
     void on_edit_contact_clicked();
 
+    void on_listWidget_itemSelectionChanged();
+
 private:
     Ui::Contacts *ui;
+    //editcontact *e;
+    DataStore store;
     void save_to_disk();
     void load_data();
     void list_contacts();
     void remove_current();
+    void list_insert (QString key);
+
 
 };
 #endif // CONTACTS_H
 void to_camel_case(std::string &word);
+

@@ -6,7 +6,7 @@
 #include "ui_contacts.h"
 #include "newcontact.h"
 #include "editcontact.h"
-#include "data_store.h"
+#include "person.h"
 
 Contacts::Contacts(QWidget *parent)
     : QMainWindow(parent)
@@ -15,20 +15,44 @@ Contacts::Contacts(QWidget *parent)
     ui->setupUi(this);
     load_data();
     list_contacts();
+    ui->listWidget->setCurrentRow(0);
 }
 
 Contacts::~Contacts()
 {
-        if(!st.empty()){
+        if(!store.phonebook.empty()){
             save_to_disk();
             }
         delete ui;
 }
 
-void Contacts::insert(std::string key)
+void Contacts::save_data(QString name, long long phone, QString email)
 {
-    QString name = QString::fromStdString(key); //QListWidget takes QString parameters, so we convert it->first to a QString
-    ui->listWidget->addItem(name);
+    if(contains(name)){
+    QMessageBox::StandardButtons change;
+    change = QMessageBox::warning(this, "Exists", "This contact is already here. Do you want to replace it?", QMessageBox::Yes|QMessageBox::No);
+    if (change==QMessageBox::Yes){
+        store.phonebook.erase(name);
+        store.phonebook.insert(std::pair<QString, Person>(name, Person(name,phone,email)));
+        QMessageBox::information(this,"Success", "Contact change successful!",QMessageBox::Ok);
+
+    }
+    }else{
+    store.phonebook.insert(std::pair<QString, Person>(name, Person(name,phone,email)));
+    QMessageBox::information(this,"Success", "Saved!",QMessageBox::Ok);
+    for(auto each : store.phonebook){
+        std::cout<<each.first.toStdString()<<' '<<each.second.phone<<' '<<each.second.email.toStdString()<<std::endl;
+    }
+    this->list_insert(name);
+
+    }
+}
+
+void Contacts::list_insert(QString key)
+{
+    std::cout<<"I am running"<<std::endl;
+    //QString name = QString::fromStdString(key); //QListWidget takes QString parameters, so we convert it->first to a QString
+    ui->listWidget->addItem(key);
 }
 
 void Contacts::edit(std::string)
@@ -45,9 +69,9 @@ void Contacts::save_to_disk()
     fs.open(filename, std::ios::out);
     if(fs.is_open()){
     while(fs.is_open()){
-        for (auto each : st){
+        for (auto each : store.phonebook){
 
-        fs<<each.first<<";"<<each.second<<std::endl;
+        fs<<each.first.toStdString()<<";"<<each.second.phone<<";"<<each.second.email.toStdString()<<std::endl;
 
         }
              fs.close();
@@ -62,12 +86,13 @@ void Contacts::load_data()
     std::string filename{"data.csv"};
     fs.open(filename, std::ios::in);
     if(fs.is_open()){
-        std::string temp, name, phone;
+        std::string email, name, phone;
         while(std::getline(fs,name, ';')){
 
-            std::getline(fs, phone );
+            std::getline(fs, phone, ';' );
+            std::getline(fs, email );
             to_camel_case(name);
-            st[name] = std::stoll(phone);
+            store.phonebook[QString::fromStdString(name)] = Person(QString::fromStdString(name), std::stoll(phone), QString::fromStdString(email));
         }
         fs.close();
 
@@ -77,8 +102,10 @@ void Contacts::load_data()
 
 void Contacts::list_contacts()
 {
-  for (auto each : st){
-        insert(each.first);
+
+  for (auto each : store.phonebook){
+      std::cout<<"I am";
+        list_insert(each.first);
     }
 }
 
@@ -135,18 +162,46 @@ void to_camel_case(std::string &word) {
 
 void Contacts::remove_name(std::string name)
 {
-    qDeleteAll(ui->listWidget->findItems(QString::fromStdString(name), Qt::MatchFixedString));
+    //qDeleteAll(ui->listWidget->findItems(QString::fromStdString(name), Qt::MatchFixedString));
 }
 
-QString Contacts::current_name() const
+bool Contacts::contains(QString key)
 {
-    return ui->listWidget->currentItem()->text();
+    auto it = store.phonebook.find(key);
+    return (it!= store.phonebook.end())?true:false;
+}
+
+long long Contacts::get_phone(QString name)
+{
+    auto it = store.phonebook.find(name);
+    return it->second.phone;
+}
+
+QString Contacts::get_email(QString name)
+{
+    auto it = store.phonebook.find(name);
+    return it->second.email;
+}
+
+QListWidgetItem* Contacts::current_name() const
+{
+    return ui->listWidget->currentItem();
 }
 
 void Contacts::remove_current()
 {
-    QListWidgetItem* item = ui->listWidget->currentItem();
-    std::string name = item->text().toStdString();
-    st.erase(name);
+    QListWidgetItem* item = ui->listWidget->currentItem();    
+    store.phonebook.erase(item->text());
     delete ui->listWidget->takeItem(ui->listWidget->row(item));
+}
+
+void Contacts::on_listWidget_itemSelectionChanged()
+{
+    QString key = current_name()->text();
+    ui->name_show->setText(key);
+    auto it = store.phonebook.find(key);
+    if(it != store.phonebook.end()){
+        ui->phone_show->setText(QString::number(it->second.phone));
+        ui->email_show->setText(it->second.email);
+    }
 }

@@ -4,10 +4,13 @@
 #include <QDialog>
 
 #include "contacts.h"
+#include "person.h"
 
 namespace Ui {
 class NewContact;
 }
+
+
 
 class NewContact : public QDialog
 {
@@ -23,10 +26,8 @@ private slots:
 
 private:
     Ui::NewContact *ui;
-    std::string name{};
-    std::string email{"john@doe.com"};
-    long long phone{};
-    Contacts *cache;
+
+    Contacts contact;
 
 };
 
