@@ -9,8 +9,9 @@
 
 editcontact::editcontact(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::editcontact)//, contact(new Contacts)
+    ui(new Ui::editcontact)
 {
+
     ui->setupUi(this);
     name = contact->current_name()->text();
     ui->phone_edit->setValidator( new QDoubleValidator(0, 100, 2, this) );

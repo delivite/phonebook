@@ -8,7 +8,6 @@ struct DataStore
 {
     static std::map<QString, Person> phonebook;
 
-
 };
 
 #endif // DATASTORE_H

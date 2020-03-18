@@ -5,7 +5,7 @@
 #include <QListWidgetItem>
 #include <person.h>
 #include "datastore.h"
-
+#include "newcontact.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Contacts; }
@@ -18,14 +18,20 @@ class Contacts : public QMainWindow
 
 public:
     Contacts(QWidget *parent = nullptr);
+    Contacts (const Contacts &e)=delete;
+    Contacts operator=(const Contacts &e) = delete;
     ~Contacts();
-    void save_data(QString name, long long phone, QString email);
     void edit(std::string);        
     void remove_name(std::string name);
     bool contains(QString key);
     long long get_phone(QString name);
     QString get_email(QString name);
     QListWidgetItem* current_name()const;
+
+signals:
+    //void list(QString name);
+public slots:
+    void save_data(QString name, long long phone, QString email);
 
 private slots:
     void on_new_contact_clicked();
@@ -37,11 +43,12 @@ private slots:
     void on_edit_contact_clicked();
 
     void on_listWidget_itemSelectionChanged();
+    //void list_it(QString name);
 
 private:
     Ui::Contacts *ui;
-    //editcontact *e;
     DataStore store;
+    //NewContact con;
     void save_to_disk();
     void load_data();
     void list_contacts();

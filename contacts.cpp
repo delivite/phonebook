@@ -8,14 +8,19 @@
 #include "editcontact.h"
 #include "person.h"
 
+//Ui::Contacts *Contacts::ui = new Ui::Contacts;
 Contacts::Contacts(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Contacts)
 {
-    ui->setupUi(this);
+
+    std::cout<<"I have been created"<<std::endl;
+    ui->setupUi(this);    
     load_data();
     list_contacts();
     ui->listWidget->setCurrentRow(0);
+
+    //connect(this, SIGNAL(list(QString)), this, SLOT(list_it(QString)));
 }
 
 Contacts::~Contacts()
@@ -40,19 +45,16 @@ void Contacts::save_data(QString name, long long phone, QString email)
     }else{
     store.phonebook.insert(std::pair<QString, Person>(name, Person(name,phone,email)));
     QMessageBox::information(this,"Success", "Saved!",QMessageBox::Ok);
-    for(auto each : store.phonebook){
-        std::cout<<each.first.toStdString()<<' '<<each.second.phone<<' '<<each.second.email.toStdString()<<std::endl;
-    }
-    this->list_insert(name);
 
+    list_insert(name);
     }
 }
 
 void Contacts::list_insert(QString key)
 {
-    std::cout<<"I am running"<<std::endl;
-    //QString name = QString::fromStdString(key); //QListWidget takes QString parameters, so we convert it->first to a QString
-    ui->listWidget->addItem(key);
+
+    QListWidgetItem* item = new QListWidgetItem(QIcon(":/img/people_106508.png"), key);
+    ui->listWidget->addItem(item);
 }
 
 void Contacts::edit(std::string)
@@ -103,8 +105,7 @@ void Contacts::load_data()
 void Contacts::list_contacts()
 {
 
-  for (auto each : store.phonebook){
-      std::cout<<"I am";
+  for (auto each : store.phonebook){      
         list_insert(each.first);
     }
 }
@@ -113,6 +114,7 @@ void Contacts::list_contacts()
 void Contacts::on_new_contact_clicked()
 {
     NewContact con;
+    connect(&con, &NewContact::send, this, &Contacts::save_data);
     con.setModal(true);
     con.exec();
 }
@@ -185,7 +187,8 @@ QString Contacts::get_email(QString name)
 
 QListWidgetItem* Contacts::current_name() const
 {
-    return ui->listWidget->currentItem();
+
+   return ui->listWidget->currentItem();
 }
 
 void Contacts::remove_current()
@@ -205,3 +208,5 @@ void Contacts::on_listWidget_itemSelectionChanged()
         ui->email_show->setText(it->second.email);
     }
 }
+
+

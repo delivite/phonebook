@@ -3,7 +3,7 @@
 
 #include <QDialog>
 
-#include "contacts.h"
+
 #include "person.h"
 
 namespace Ui {
@@ -17,17 +17,19 @@ class NewContact : public QDialog
     Q_OBJECT
 
 public:
-    explicit NewContact(QWidget *parent = nullptr);
+    explicit NewContact(QWidget *parent = 0 /*nullptr*/);
     ~NewContact();
 
 private slots:
     void on_save_button_clicked();
     void on_cancel_button_clicked();
 
+signals:
+    void send(QString name, long long phone, QString email);
+
 private:
     Ui::NewContact *ui;
 
-    Contacts contact;
 
 };
 

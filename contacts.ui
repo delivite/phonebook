@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>Contacts</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/img/icon.png</normaloff>:/img/icon.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="3">
@@ -27,13 +31,6 @@
        <widget class="QPushButton" name="new_contact">
         <property name="text">
          <string>New Contact</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="show_contact">
-        <property name="text">
-         <string>Show Details</string>
         </property>
        </widget>
       </item>
@@ -142,6 +139,8 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
