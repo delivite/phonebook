@@ -3,9 +3,6 @@
 
 #include <QDialog>
 
-
-#include "person.h"
-
 namespace Ui {
 class NewContact;
 }
@@ -29,8 +26,6 @@ signals:
 
 private:
     Ui::NewContact *ui;
-
-
 };
-
+QString to_camel_case(const QString &);
 #endif // NEWCONTACT_H

@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
+    <width>600</width>
     <height>400</height>
    </rect>
   </property>
   <property name="maximumSize">
    <size>
-    <width>500</width>
+    <width>600</width>
     <height>400</height>
    </size>
   </property>
@@ -73,7 +73,7 @@
     <item row="0" column="1">
      <widget class="QListWidget" name="listWidget">
       <property name="styleSheet">
-       <string notr="true">font: 14pt &quot;MS Shell Dlg 2&quot;;</string>
+       <string notr="true">font: 75 12pt &quot;Segoe Print&quot;;</string>
       </property>
       <property name="sortingEnabled">
        <bool>true</bool>
@@ -84,7 +84,7 @@
      <widget class="QFrame" name="frame">
       <property name="minimumSize">
        <size>
-        <width>200</width>
+        <width>250</width>
         <height>0</height>
        </size>
       </property>
@@ -110,6 +110,9 @@
        </item>
        <item>
         <widget class="QLabel" name="phone_show">
+         <property name="styleSheet">
+          <string notr="true">font: 14pt &quot;Segoe Print&quot;;</string>
+         </property>
          <property name="text">
           <string>TextLabel</string>
          </property>
@@ -117,6 +120,9 @@
        </item>
        <item>
         <widget class="QLabel" name="email_show">
+         <property name="styleSheet">
+          <string notr="true">font: 14pt &quot;Segoe Print&quot;;</string>
+         </property>
          <property name="text">
           <string/>
          </property>
@@ -132,7 +138,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>500</width>
+     <width>600</width>
      <height>26</height>
     </rect>
    </property>
