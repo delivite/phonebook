@@ -1,6 +1,8 @@
+#include <regex>
 #include <iostream>
 #include <QMessageBox>
 #include <QDoubleValidator>
+
 #include "newcontact.h"
 #include "ui_newcontact.h"
 
@@ -19,9 +21,9 @@ NewContact::~NewContact()
 
 void NewContact::on_save_button_clicked()
 {
-    QString name{};
+    QString name{}, email{};
     long long phone{};
-    QString email{};
+
     if(!(ui->phone_edit->text().isEmpty())){
 
          if((ui->name_edit->text().isEmpty())){
@@ -31,9 +33,19 @@ void NewContact::on_save_button_clicked()
              name = to_camel_case(ui->name_edit->text());
          }
          phone = ui->phone_edit->text().toLongLong();
-         email = ui->email_edit->text();
+         if(!ui->email_edit->text().isEmpty()){
+             if(is_email_valid(ui->email_edit->text().toStdString())){
+                 email = ui->email_edit->text();
+                 emit send(name, phone, email);
+                 close();
+             }else{
+                 QMessageBox::information(this,"Email", "Please enter a valid email address or leave space blank!", QMessageBox::Ok);
+             }
+         }else{
+
          emit send(name, phone, email);
          close();
+         }
 
      }else{
         /* Phone field cannot be empty.
@@ -48,6 +60,7 @@ void NewContact::on_cancel_button_clicked()
     close();
 }
 
+/*Helpers*/
 QString to_camel_case(const QString &key) {
     std::string word = key.toStdString();
     char *s = &word[0];
@@ -68,4 +81,14 @@ QString to_camel_case(const QString &key) {
         }
     }
     return QString::fromStdString(word);
+}
+
+bool is_email_valid(const std::string& email)
+{
+   // define a regular expression
+   const std::regex pattern
+      ("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");
+
+   // try to match the string with the regular expression
+   return std::regex_match(email, pattern);
 }

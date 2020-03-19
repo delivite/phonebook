@@ -38,11 +38,11 @@ void Contacts::save_data(QString name, long long phone, QString email)
     if (change==QMessageBox::Yes){
         store.phonebook.erase(name);
         store.phonebook.insert(std::pair<QString, Person>(name, Person(name,phone,email)));
-        QMessageBox::information(this,"Success", "Contact change successful!",QMessageBox::Ok);
+        QMessageBox::information(this,"Success", "Contact change successful!", QMessageBox::Ok);
     }
     }else{
     store.phonebook.insert(std::pair<QString, Person>(name, Person(name,phone,email)));
-    QMessageBox::information(this,"Success", "Saved!",QMessageBox::Ok);
+    QMessageBox::information(this, "Success", "Saved!", QMessageBox::Ok);
 
     list_insert(name);
     }
@@ -53,7 +53,7 @@ void Contacts::edit_data(QString name, long long phone, QString email){
      store.phonebook.insert(std::pair<QString, Person>(name, Person(name,phone,email)));
      list_insert(name);
 
-     QMessageBox::information(this,"Success", "Contact change successful!",QMessageBox::Ok);
+     QMessageBox::information(this, "Success", "Contact change successful!", QMessageBox::Ok);
 }
 
 
@@ -99,7 +99,7 @@ void Contacts::load_data()
         fs.close();
 
     }else
-        QMessageBox::critical(this,"Error", "Error opening file!",QMessageBox::Ok);
+        QMessageBox::critical(this,"Error", "Error opening file!", QMessageBox::Ok);
 }
 
 void Contacts::list_contacts()
@@ -136,7 +136,7 @@ void Contacts::on_delete_contact_clicked()
 
 void Contacts::on_edit_contact_clicked()
 {
-    emit current_contact(ui->listWidget->currentItem()->text()); //Send selected as a signal to the Contacts class
+    emit current_contact(ui->listWidget->currentItem()->text()); //Send selected contact as a signal to the Contacts class
 
     //Show dialog
     e.setModal(true);
@@ -157,6 +157,3 @@ void Contacts::on_listWidget_itemSelectionChanged()
     ui->phone_show->setText(QString::number(store.get_phone(key)));
     ui->email_show->setText(store.get_email(key));
 }
-
-
-

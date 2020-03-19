@@ -88,6 +88,12 @@
         <height>0</height>
        </size>
       </property>
+      <property name="maximumSize">
+       <size>
+        <width>250</width>
+        <height>16777215</height>
+       </size>
+      </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 255, 255);</string>
       </property>
@@ -125,6 +131,9 @@
          </property>
          <property name="text">
           <string/>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

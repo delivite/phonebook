@@ -27,5 +27,8 @@ signals:
 private:
     Ui::NewContact *ui;
 };
+
+//Helpers
 QString to_camel_case(const QString &);
+bool is_email_valid(const std::string& email);
 #endif // NEWCONTACT_H

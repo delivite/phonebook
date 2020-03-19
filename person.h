@@ -9,15 +9,8 @@ struct Person
     long long phone{};
     QString email{};
 
-    Person()
-    {
-
-    }
-
-    Person(QString name, long long phone, QString email): name(name), phone(phone), email(email)
-    {
-
-    }
+    Person();
+    Person(QString name, long long phone, QString email);
 };
 
 #endif // PERSON_H
