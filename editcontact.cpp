@@ -33,8 +33,11 @@ void editcontact::on_save_button_clicked()
     QString name = ui->name_edit->text();
     long long phone = ui->phone_edit->text().toLongLong();
     QString email = ui->email_edit->text();
+    QString job;
+    QString meeting;
+    QString remember;
 
-    emit edit(name, phone, email);
+    emit edit(name, phone, email, job, meeting, remember);
     close();
 }
 

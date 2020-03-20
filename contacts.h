@@ -25,8 +25,9 @@ signals:
     void current_contact(QString name);
 
 public slots:
-    void save_data(QString name, long long phone, QString email);
-    void edit_data(QString name, long long phone, QString email);
+    void save_data(QString name, long long phone, QString email, QString job, QString meeting, QString remember);
+
+    void edit_data(QString name, long long phone, QString email, QString job, QString meeting, QString remember);
 
 private slots:
     void on_new_contact_clicked();

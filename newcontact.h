@@ -22,7 +22,7 @@ private slots:
     void on_cancel_button_clicked();
 
 signals:
-    void send(QString name, long long phone, QString email);
+    void send(QString name, long long phone, QString email, QString job, QString meeting, QString remember);
 
 private:
     Ui::NewContact *ui;

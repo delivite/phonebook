@@ -44,4 +44,5 @@ RESOURCES += \
     resources.qrc
 
 DISTFILES += \
+    img/Communication-email-icon.png \
     img/icon.png

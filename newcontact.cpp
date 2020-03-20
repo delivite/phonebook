@@ -21,7 +21,7 @@ NewContact::~NewContact()
 
 void NewContact::on_save_button_clicked()
 {
-    QString name{}, email{};
+    QString name{}, email{}, job{}, meeting{}, remember{};
     long long phone{};
 
     if(!(ui->phone_edit->text().isEmpty())){
@@ -33,17 +33,20 @@ void NewContact::on_save_button_clicked()
              name = to_camel_case(ui->name_edit->text());
          }
          phone = ui->phone_edit->text().toLongLong();
+         job = ui->job_edit->text().isEmpty()? "Job title" : ui->job_edit->text();
+         meeting = ui->meeting_edit->text().isEmpty()? "XZY Company" : ui->meeting_edit->text();
+         remember = ui->remember_edit->text().isEmpty()? "What is one thing to remember about this person?" : ui->remember_edit->text();
          if(!ui->email_edit->text().isEmpty()){
              if(is_email_valid(ui->email_edit->text().toStdString())){
                  email = ui->email_edit->text();
-                 emit send(name, phone, email);
+                 emit send(name, phone, email, job, meeting, remember);
                  close();
              }else{
                  QMessageBox::information(this,"Email", "Please enter a valid email address or leave space blank!", QMessageBox::Ok);
              }
          }else{
 
-         emit send(name, phone, email);
+         emit send(name, phone, email, job, meeting, remember);
          close();
          }
 

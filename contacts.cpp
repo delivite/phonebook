@@ -30,27 +30,28 @@ Contacts::~Contacts()
         delete ui;
 }
 
-void Contacts::save_data(QString name, long long phone, QString email)
+void Contacts::save_data(QString name, long long phone, QString email, QString job, QString meeting, QString remember)
 {
     if(store.contains(name)){
     QMessageBox::StandardButtons change;
     change = QMessageBox::warning(this, "Exists", "This contact is already here. Do you want to replace it?", QMessageBox::Yes|QMessageBox::No);
     if (change==QMessageBox::Yes){
         store.phonebook.erase(name);
-        store.phonebook.insert(std::pair<QString, Person>(name, Person(name,phone,email)));
+        store.phonebook.insert(std::pair<QString, Person>(name, Person(name, phone, email, job, meeting, remember)));
         QMessageBox::information(this,"Success", "Contact change successful!", QMessageBox::Ok);
     }
     }else{
-    store.phonebook.insert(std::pair<QString, Person>(name, Person(name,phone,email)));
+    store.phonebook.insert(std::pair<QString, Person>(name, Person(name, phone, email, job, meeting, remember)));
     QMessageBox::information(this, "Success", "Saved!", QMessageBox::Ok);
 
     list_insert(name);
     }
 }
 
-void Contacts::edit_data(QString name, long long phone, QString email){
+void Contacts::edit_data(QString name, long long phone, QString email, QString job, QString meeting, QString remember)
+{
      remove_current();
-     store.phonebook.insert(std::pair<QString, Person>(name, Person(name,phone,email)));
+     store.phonebook.insert(std::pair<QString, Person>(name, Person(name, phone, email, job, meeting, remember)));
      list_insert(name);
 
      QMessageBox::information(this, "Success", "Contact change successful!", QMessageBox::Ok);
@@ -74,7 +75,8 @@ void Contacts::save_to_disk()
     if(fs.is_open()){
     while(fs.is_open()){
         for (auto each : store.phonebook){
-        fs<<each.first.toStdString()<<";"<<each.second.phone<<";"<<each.second.email.toStdString()<<std::endl;
+        fs<<each.first.toStdString()<<";"<<each.second.phone<<";"<<each.second.email.toStdString()
+         <<";"<<each.second.job.toStdString()<<";"<<each.second.meeting.toStdString()<<";"<<each.second.remember.toStdString()<<std::endl;
         }
              fs.close();
     }
@@ -88,13 +90,19 @@ void Contacts::load_data()
     std::string filename{"data.csv"};
     fs.open(filename, std::ios::in);
     if(fs.is_open()){
-        std::string email, name, phone;
+        std::string email, name, phone, job, meeting, remember;
+        if (!(fs.peek() == std::ifstream::traits_type::eof())){
         while(std::getline(fs,name, ';')){
-
             std::getline(fs, phone, ';' );
-            std::getline(fs, email );
+            std::getline(fs, email, ';' );
+            std::getline(fs, job, ';' );
+            std::getline(fs, meeting, ';' );
+            std::getline(fs, remember);
 
-            store.phonebook[QString::fromStdString(name)] = Person(QString::fromStdString(name), std::stoll(phone), QString::fromStdString(email));
+            store.phonebook[QString::fromStdString(name)] = Person(QString::fromStdString(name), std::stoll(phone)
+                                , QString::fromStdString(email), QString::fromStdString(job)
+                                , QString::fromStdString(meeting), QString::fromStdString(remember));
+        }
         }
         fs.close();
 
@@ -156,4 +164,7 @@ void Contacts::on_listWidget_itemSelectionChanged()
     ui->name_show->setText(key);
     ui->phone_show->setText(QString::number(store.get_phone(key)));
     ui->email_show->setText(store.get_email(key));
+    ui->job_show->setText(store.get_job(key) + " at " + store.get_meet(key));
+    //ui->meet_show->setText(store.get_meet(key));
+    ui->remember_show->setText(store.get_remember(key));
 }
