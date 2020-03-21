@@ -54,7 +54,7 @@ void NewContact::on_save_button_clicked()
         /* Phone field cannot be empty.
          * If it is, prompt the user to input a phone number
         */
-         QMessageBox::critical(this,"Can't Do It!", "Phone Field Cannot Be Empty!");
+         QMessageBox::critical(this,"Can't Do It!", "Phone Field Cannot Be Empty!");         
      }
     //delete ui;
 }

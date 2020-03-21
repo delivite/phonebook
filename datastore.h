@@ -15,6 +15,7 @@ public:
     QString get_remember(QString name);
     bool contains(QString name);
     void set_remember(QString name, QString text);
+    QString get_all_emails();
 
 };
 

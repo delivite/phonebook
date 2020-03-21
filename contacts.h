@@ -27,7 +27,7 @@ signals:
 public slots:
     void save_data(QString name, long long phone, QString email, QString job, QString meeting, QString remember);
 
-    void edit_data(QString name, long long phone, QString email, QString job, QString meeting, QString remember);
+    void edit_data(QString name, long long phone, QString email, QString job, QString meeting);
 
 private slots:
     void on_new_contact_clicked();
@@ -44,6 +44,14 @@ private slots:
 
     void on_save_remember_clicked();
 
+    void on_actionEmail_All_Contacts_triggered();
+
+    void on_actionClose_triggered();
+
+    void on_actionNew_Contact_triggered();
+
+    void on_pushButton_3_clicked();
+
 private:
     Ui::Contacts *ui;
     DataStore store;
@@ -53,7 +61,8 @@ private:
     void load_data();
     void list_contacts();
     void remove_current();
-    void list_insert (QString key);    
+    void list_insert (QString key);
+    void email_all_contacts();
 
 };
 #endif // CONTACTS_H

@@ -45,3 +45,12 @@ void DataStore::set_remember(QString name, QString text)
     auto it = phonebook.find(name);
     it->second.remember = text;
 }
+
+QString DataStore::get_all_emails()
+{
+    QString all_emails;
+    for(auto it : phonebook){
+        all_emails += it.second.email + ";";
+    }
+    return all_emails;
+}

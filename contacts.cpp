@@ -20,8 +20,9 @@ Contacts::Contacts(QWidget *parent)
     load_data();
     list_contacts();
     ui->listWidget->setCurrentRow(0);
+    ui->statusbar->showMessage("Ready!");
     connect(this, &Contacts::current_contact, &e, &editcontact::fill_data);
-    connect(&e, &editcontact::edit, this, &Contacts::edit_data);
+    connect(&e, &editcontact::edit, this, &Contacts::edit_data);    
 }
 
 Contacts::~Contacts()
@@ -51,8 +52,9 @@ void Contacts::save_data(QString name, long long phone, QString email, QString j
     }
 }
 
-void Contacts::edit_data(QString name, long long phone, QString email, QString job, QString meeting, QString remember)
+void Contacts::edit_data(QString name, long long phone, QString email, QString job, QString meeting)
 {
+    QString remember = ui->remember_show->toPlainText();
      remove_current();
      store.phonebook.insert(std::pair<QString, Person>(name, Person(name, phone, email, job, meeting, remember)));
      list_insert(name);
@@ -66,6 +68,13 @@ void Contacts::list_insert(QString key)
     QListWidgetItem* item = new QListWidgetItem(QIcon(":/img/people_106508.png"), key);
     ui->listWidget->addItem(item);
     ui->listWidget->setCurrentItem(item);
+}
+
+void Contacts::email_all_contacts()
+{
+    QString all_emails = store.get_all_emails();
+    QDesktopServices::openUrl(QUrl("mailto:" + all_emails, QUrl::TolerantMode));
+
 }
 
 
@@ -95,6 +104,7 @@ void Contacts::load_data()
     if(fs.is_open()){
         std::string email, name, phone, job, meeting, remember;
         if (!(fs.peek() == std::ifstream::traits_type::eof())){
+
         while(std::getline(fs,name, ';')){
             std::getline(fs, phone, ';' );
             std::getline(fs, email, ';' );
@@ -110,7 +120,7 @@ void Contacts::load_data()
         fs.close();
 
     }else
-        QMessageBox::critical(this,"Error", "Error opening file!", QMessageBox::Ok);
+        ui->statusbar->showMessage("Unable to open file");
 }
 
 void Contacts::list_contacts()
@@ -141,7 +151,7 @@ void Contacts::on_delete_contact_clicked()
     confirm = QMessageBox::warning(this, "Confirm", "Delete Contact?", QMessageBox::Yes|QMessageBox::No);
     if (confirm == QMessageBox::Yes){
     remove_current();
-    QMessageBox::information(this, "Success", "Contact deleted!");
+    ui->statusbar->showMessage("Contact Deleted");
     }
 }
 
@@ -169,6 +179,7 @@ void Contacts::on_listWidget_itemSelectionChanged()
     ui->email_show->setText(store.get_email(key));
     ui->job_show->setText(store.get_job(key) + " at " + store.get_meet(key));
     ui->remember_show->setPlainText(store.get_remember(key));
+    ui->statusbar->showMessage(key);
 }
 
 void Contacts::on_pushButton_clicked()
@@ -192,5 +203,25 @@ void Contacts::on_save_remember_clicked()
     QString name = ui->listWidget->currentItem()->text();
     QString text = ui->remember_show->toPlainText();
     store.set_remember(name, text);
-   // ui->remember_show->setTextInteractionFlags(Qt::TextInteractionFlag::NoTextInteraction);
+    ui->statusbar->showMessage("Remember text saved!");
+}
+
+void Contacts::on_actionEmail_All_Contacts_triggered()
+{
+    email_all_contacts();
+}
+
+void Contacts::on_actionClose_triggered()
+{
+    QApplication::quit();
+}
+
+void Contacts::on_actionNew_Contact_triggered()
+{
+    on_new_contact_clicked();
+}
+
+void Contacts::on_pushButton_3_clicked()
+{
+    email_all_contacts();
 }

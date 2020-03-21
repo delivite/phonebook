@@ -24,7 +24,7 @@ private slots:
     void on_cancel_button_clicked();
 
 signals:
-    void edit(QString name, long long phone, QString email, QString job, QString meeting, QString remember);
+    void edit(QString name, long long phone, QString email, QString job, QString meeting);
 
 private:
     Ui::editcontact *ui;
