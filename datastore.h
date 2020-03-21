@@ -7,6 +7,7 @@
 struct DataStore
 {
     static std::map<QString, Person> phonebook;
+public:
     QString get_email(QString name);
     long long get_phone(QString name);
     QString get_job(QString name);

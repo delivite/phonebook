@@ -1,6 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <QMessageBox>
+#include <QDesktopServices>
+#include <memory>
+#include <QUrl>
 
 #include "contacts.h"
 #include "ui_contacts.h"
@@ -13,7 +16,6 @@ Contacts::Contacts(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Contacts)
 {
-    std::cout<<"I have been created"<<std::endl;
     ui->setupUi(this);    
     load_data();
     list_contacts();
@@ -27,6 +29,7 @@ Contacts::~Contacts()
         if(!store.phonebook.empty()){
             save_to_disk();
             }
+
         delete ui;
 }
 
@@ -165,6 +168,12 @@ void Contacts::on_listWidget_itemSelectionChanged()
     ui->phone_show->setText(QString::number(store.get_phone(key)));
     ui->email_show->setText(store.get_email(key));
     ui->job_show->setText(store.get_job(key) + " at " + store.get_meet(key));
-    //ui->meet_show->setText(store.get_meet(key));
     ui->remember_show->setText(store.get_remember(key));
+}
+
+void Contacts::on_pushButton_clicked()
+{
+    QString email = store.get_email(ui->listWidget->currentItem()->text());
+    QDesktopServices::openUrl(QUrl("mailto:" + email, QUrl::TolerantMode));
+
 }

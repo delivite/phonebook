@@ -14,7 +14,7 @@ class NewContact : public QDialog
     Q_OBJECT
 
 public:
-    explicit NewContact(QWidget *parent = 0 /*nullptr*/);
+    explicit NewContact(QWidget *parent = nullptr);
     ~NewContact();
 
 private slots:

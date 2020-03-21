@@ -17,8 +17,8 @@ class Contacts : public QMainWindow
 
 public:
     Contacts(QWidget *parent = nullptr);
-    //Contacts (const Contacts &e)=delete;
-    //Contacts operator=(const Contacts &e) = delete;
+    Contacts (const Contacts &e)=delete;
+    Contacts operator=(const Contacts &e) = delete;
     ~Contacts();
 
 signals:
@@ -40,11 +40,13 @@ private slots:
 
     void on_listWidget_itemSelectionChanged();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::Contacts *ui;
     DataStore store;
     editcontact e;
-
+private:
     void save_to_disk();
     void load_data();
     void list_contacts();
