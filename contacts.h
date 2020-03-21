@@ -40,7 +40,9 @@ private slots:
 
     void on_listWidget_itemSelectionChanged();
 
-    void on_pushButton_clicked();
+    void on_pushButton_clicked();    
+
+    void on_save_remember_clicked();
 
 private:
     Ui::Contacts *ui;

@@ -14,6 +14,7 @@ public:
     QString get_meet(QString name);
     QString get_remember(QString name);
     bool contains(QString name);
+    void set_remember(QString name, QString text);
 
 };
 

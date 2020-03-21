@@ -30,6 +30,7 @@ QString DataStore::get_meet(QString name)
 QString DataStore::get_remember(QString name)
 {
     auto it = phonebook.find(name);
+    //it->second.remember = "Hey";
     return it->second.remember;
 }
 
@@ -37,4 +38,10 @@ bool DataStore::contains(QString name)
 {
     auto it = phonebook.find(name);
     return (it!= phonebook.end())?true:false;
+}
+
+void DataStore::set_remember(QString name, QString text)
+{
+    auto it = phonebook.find(name);
+    it->second.remember = text;
 }

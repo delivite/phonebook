@@ -56,7 +56,7 @@ void NewContact::on_save_button_clicked()
         */
          QMessageBox::critical(this,"Can't Do It!", "Phone Field Cannot Be Empty!");
      }
-    delete ui;
+    //delete ui;
 }
 
 void NewContact::on_cancel_button_clicked()

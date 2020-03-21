@@ -168,7 +168,7 @@ void Contacts::on_listWidget_itemSelectionChanged()
     ui->phone_show->setText(QString::number(store.get_phone(key)));
     ui->email_show->setText(store.get_email(key));
     ui->job_show->setText(store.get_job(key) + " at " + store.get_meet(key));
-    ui->remember_show->setText(store.get_remember(key));
+    ui->remember_show->setPlainText(store.get_remember(key));
 }
 
 void Contacts::on_pushButton_clicked()
@@ -176,4 +176,21 @@ void Contacts::on_pushButton_clicked()
     QString email = store.get_email(ui->listWidget->currentItem()->text());
     QDesktopServices::openUrl(QUrl("mailto:" + email, QUrl::TolerantMode));
 
+}
+
+/*void Contacts::on_pushButton_4_clicked()
+{
+    ui->remember_show->setTextInteractionFlags(Qt::TextInteractionFlag::TextEditable);
+    auto newCursor = new QTextCursor(ui->remember_show->document());
+    newCursor->movePosition(QTextCursor::End);
+    ui->remember_show->setTextCursor(*newCursor);
+   // ui->->setTextCursor(newCursor);
+}*/
+
+void Contacts::on_save_remember_clicked()
+{
+    QString name = ui->listWidget->currentItem()->text();
+    QString text = ui->remember_show->toPlainText();
+    store.set_remember(name, text);
+   // ui->remember_show->setTextInteractionFlags(Qt::TextInteractionFlag::NoTextInteraction);
 }
