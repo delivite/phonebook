@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     datastore.cpp \
     editcontact.cpp \
+    emailall.cpp \
     main.cpp \
     contacts.cpp \
     newcontact.cpp \
@@ -27,12 +28,14 @@ HEADERS += \
     contacts.h \
     datastore.h \
     editcontact.h \
+    emailall.h \
     newcontact.h \
     person.h
 
 FORMS += \
     contacts.ui \
     editcontact.ui \
+    emailall.ui \
     newcontact.ui
 
 # Default rules for deployment.

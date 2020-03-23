@@ -2,14 +2,13 @@
 #include <fstream>
 #include <QMessageBox>
 #include <QDesktopServices>
-#include <memory>
 #include <QUrl>
 
 #include "contacts.h"
 #include "ui_contacts.h"
 #include "newcontact.h"
-#include "editcontact.h"
 #include "person.h"
+#include "emailall.h"
 
 
 Contacts::Contacts(QWidget *parent)
@@ -186,7 +185,6 @@ void Contacts::on_pushButton_clicked()
 {
     QString email = store.get_email(ui->listWidget->currentItem()->text());
     QDesktopServices::openUrl(QUrl("mailto:" + email, QUrl::TolerantMode));
-
 }
 
 /*void Contacts::on_pushButton_4_clicked()
@@ -208,7 +206,7 @@ void Contacts::on_save_remember_clicked()
 
 void Contacts::on_actionEmail_All_Contacts_triggered()
 {
-    email_all_contacts();
+    on_pushButton_3_clicked();
 }
 
 void Contacts::on_actionClose_triggered()
@@ -223,5 +221,8 @@ void Contacts::on_actionNew_Contact_triggered()
 
 void Contacts::on_pushButton_3_clicked()
 {
-    email_all_contacts();
+    EmailAll emailAll;
+    emailAll.setModal(true);
+    emailAll.exec();
+    //email_all_contacts();
 }

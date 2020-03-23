@@ -29,9 +29,14 @@ QString DataStore::get_meet(QString name)
 
 QString DataStore::get_remember(QString name)
 {
-    auto it = phonebook.find(name);
-    //it->second.remember = "Hey";
+    auto it = phonebook.find(name);    
     return it->second.remember;
+}
+
+QString DataStore::get_name(QString name)
+{
+    auto it = phonebook.find(name);
+    return it->first;
 }
 
 bool DataStore::contains(QString name)
