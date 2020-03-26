@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -22,7 +22,8 @@ SOURCES += \
     main.cpp \
     contacts.cpp \
     newcontact.cpp \
-    person.cpp
+    person.cpp \
+    smtp.cpp
 
 HEADERS += \
     contacts.h \
@@ -30,7 +31,8 @@ HEADERS += \
     editcontact.h \
     emailall.h \
     newcontact.h \
-    person.h
+    person.h \
+    smtp.h
 
 FORMS += \
     contacts.ui \

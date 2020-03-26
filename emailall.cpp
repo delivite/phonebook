@@ -5,6 +5,8 @@
 #include <QDesktopServices>
 #include <QUrl>
 
+#include "smtp.h"
+
 EmailAll::EmailAll(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::EmailAll)
@@ -55,10 +57,14 @@ void EmailAll::personalize_combo()
 
 void EmailAll::customize_email()
 {
+
     QString emails{};
     for(int i = 0; i<ui->listWidget->count(); i++){
         if(ui->listWidget->item(i)->checkState()){
-            emails += d.get_email(ui->listWidget->item(i)->text()) + ";";
+            //For each item in the contact list, I'm checking for the selected contacts
+            //emails += d.get_email(ui->listWidget->item(i)->text()) + ";";
+
+
             QString subject_line = ui->subject_edit->text();
             QString message_text = ui->message_edit->toPlainText();
 
@@ -66,6 +72,13 @@ void EmailAll::customize_email()
             replace_personalizers (message_text, i);
             std::cout<<message_text.toStdString()<<std::endl;
             std::cout<<subject_line.toStdString()<<std::endl;
+
+            Smtp* smtp = new Smtp("sampinn316@gmail.com", "D3l1v1t3", "smtp.gmail.com", 465);
+            //connect(smtp, SIGNAL(status(QString)), this, SLOT(mailSent(QString)));
+            if( !files.isEmpty() )
+                smtp->sendMail("sampinn316@gmail.com", d.get_email(ui->listWidget->item(i)->text()) ,subject_line, message_text, files );
+            else
+                smtp->sendMail("sampinn316@gmail.com", d.get_email(ui->listWidget->item(i)->text()) ,subject_line, message_text, files );
         }
     }
     //QDesktopServices::openUrl(QUrl("mailto:?to=" + emails +"&subject=" + ui->subject_edit->text() +"&body=" + text, QUrl::TolerantMode));
@@ -80,8 +93,42 @@ void EmailAll::replace_personalizers(QString &text, int i)
      text.replace("[COMPANY]", d.get_meet(ui->listWidget->item(i)->text()));
 }
 
+void EmailAll::sendMail()
+{
+
+}
+
+void EmailAll::browse()
+{
+    files.clear();
+
+    QFileDialog dialog(this);
+    dialog.setDirectory(QDir::homePath());
+    dialog.setFileMode(QFileDialog::ExistingFiles);
+
+    if (dialog.exec())
+        files = dialog.selectedFiles();
+
+    QString fileListString;
+    foreach(QString file, files)
+        fileListString.append( "\"" + QFileInfo(file).fileName() + "\" " );
+
+    ui->file->setText( fileListString );
+}
+
 
 void EmailAll::on_send_button_clicked()
 {
     customize_email();
+}
+
+void EmailAll::mailSent(QString status)
+{
+    if(status == "Message sent")
+        QMessageBox::warning( 0, tr( "Qt Simple SMTP client" ), tr( "Message sent!\n\n" ) );
+}
+
+void EmailAll::on_browse_button_clicked()
+{
+    browse();
 }

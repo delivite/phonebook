@@ -64,7 +64,7 @@ void NewContact::on_cancel_button_clicked()
     close();
 }
 
-/*Helpers*/
+/*******************************Helpers********************************************/
 QString to_camel_case(const QString &key) {
     std::string word = key.toStdString();
     char *s = &word[0];

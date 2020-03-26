@@ -187,14 +187,6 @@ void Contacts::on_pushButton_clicked()
     QDesktopServices::openUrl(QUrl("mailto:" + email, QUrl::TolerantMode));
 }
 
-/*void Contacts::on_pushButton_4_clicked()
-{
-    ui->remember_show->setTextInteractionFlags(Qt::TextInteractionFlag::TextEditable);
-    auto newCursor = new QTextCursor(ui->remember_show->document());
-    newCursor->movePosition(QTextCursor::End);
-    ui->remember_show->setTextCursor(*newCursor);
-   // ui->->setTextCursor(newCursor);
-}*/
 
 void Contacts::on_save_remember_clicked()
 {
@@ -224,5 +216,4 @@ void Contacts::on_pushButton_3_clicked()
     EmailAll emailAll;
     emailAll.setModal(true);
     emailAll.exec();
-    //email_all_contacts();
 }
