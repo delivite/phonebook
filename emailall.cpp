@@ -1,9 +1,9 @@
 #include "emailall.h"
 #include "ui_emailall.h"
 
-#include <iostream>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QMessageBox>
 
 #include "smtp.h"
 
@@ -12,28 +12,20 @@ EmailAll::EmailAll(QWidget *parent) :
     ui(new Ui::EmailAll)
 {
     ui->setupUi(this);
+
+    bar = new QStatusBar(this);
+    ui->status_layout->addWidget(bar);
+
+    bar->showMessage("Ready! Click on Add Personalization bar to add a personal touch.");
     list_all_contacts();
-    personalize_combo();
+    populate_combo();
 }
 
 EmailAll::~EmailAll()
 {
+    emit show_parent();
+    delete bar;
     delete ui;
-}
-
-void EmailAll::on_cancel_button_clicked()
-{
-    close();
-}
-
-void EmailAll::on_personalize_currentTextChanged()
-{
-    QString text = "[" + ui->personalize->currentText() + "] ";
-    if(!ui->personalize->currentText().isEmpty()){
-        ui->message_edit->insertPlainText(text);
-        ui->message_edit->setFocus();
-    }
-
 }
 
 void EmailAll::list_all_contacts()
@@ -45,7 +37,7 @@ void EmailAll::list_all_contacts()
     }
 }
 
-void EmailAll::personalize_combo()
+void EmailAll::populate_combo()
 {
     ui->personalize->addItem("");
     ui->personalize->addItem("NAME");
@@ -55,47 +47,54 @@ void EmailAll::personalize_combo()
     ui->personalize->addItem("COMPANY");
 }
 
-void EmailAll::customize_email()
+void EmailAll::send_email()
 {
-
+    int count = 0;
     QString emails{};
     for(int i = 0; i<ui->listWidget->count(); i++){
         if(ui->listWidget->item(i)->checkState()){
             //For each item in the contact list, I'm checking for the selected contacts
-            //emails += d.get_email(ui->listWidget->item(i)->text()) + ";";
 
+            QString email = d.get_email(ui->listWidget->item(i)->text());
 
             QString subject_line = ui->subject_edit->text();
             QString message_text = ui->message_edit->toPlainText();
 
-            replace_personalizers(subject_line, i);
-            replace_personalizers (message_text, i);
-            std::cout<<message_text.toStdString()<<std::endl;
-            std::cout<<subject_line.toStdString()<<std::endl;
+            //Personalize the subject line and email text
+            personalize(subject_line, i);
+            personalize(message_text, i);
 
+            //Send email
             Smtp* smtp = new Smtp("sampinn316@gmail.com", "D3l1v1t3", "smtp.gmail.com", 465);
-            //connect(smtp, SIGNAL(status(QString)), this, SLOT(mailSent(QString)));
+            connect(smtp, &Smtp::send_status, this, &EmailAll::show_status);
+
             if( !files.isEmpty() )
-                smtp->sendMail("sampinn316@gmail.com", d.get_email(ui->listWidget->item(i)->text()) ,subject_line, message_text, files );
+                smtp->sendMail("sampinn316@gmail.com", email ,subject_line, message_text, files );
             else
-                smtp->sendMail("sampinn316@gmail.com", d.get_email(ui->listWidget->item(i)->text()) ,subject_line, message_text, files );
+                smtp->sendMail("sampinn316@gmail.com", email ,subject_line, message_text);
+            bar->showMessage("Email Sent to " + email);
+            ++count;
         }
     }
-    //QDesktopServices::openUrl(QUrl("mailto:?to=" + emails +"&subject=" + ui->subject_edit->text() +"&body=" + text, QUrl::TolerantMode));
+    if (count<=0)
+    {
+        QMessageBox::critical(this, "No Contact Selected", "Select at least one contact to send message", QMessageBox::Ok);
+        bar->showMessage("No Contact Selected. Select at least one contact to send message");
+    }else
+    {
+        QString email_trivia = (count>1)? " Emails":" Email";
+        QMessageBox::information(this, "Success", QString::number(count) + email_trivia + " Sent Successfully!", QMessageBox::Ok);
+        close();
+    }
 }
 
-void EmailAll::replace_personalizers(QString &text, int i)
+void EmailAll::personalize(QString &text, int i)
 {
-     text.replace("[NAME]", ui->listWidget->item(i)->text());
-     text.replace("[EMAIL]", d.get_email(ui->listWidget->item(i)->text()));
-     text.replace("[PHONE]", QString::number(d.get_phone(ui->listWidget->item(i)->text())));
-     text.replace("[TITLE]", d.get_job(ui->listWidget->item(i)->text()));
-     text.replace("[COMPANY]", d.get_meet(ui->listWidget->item(i)->text()));
-}
-
-void EmailAll::sendMail()
-{
-
+    text.replace("[NAME]", ui->listWidget->item(i)->text());
+    text.replace("[EMAIL]", d.get_email(ui->listWidget->item(i)->text()));
+    text.replace("[PHONE]", QString::number(d.get_phone(ui->listWidget->item(i)->text())));
+    text.replace("[TITLE]", d.get_job(ui->listWidget->item(i)->text()));
+    text.replace("[COMPANY]", d.get_meet(ui->listWidget->item(i)->text()));
 }
 
 void EmailAll::browse()
@@ -116,16 +115,28 @@ void EmailAll::browse()
     ui->file->setText( fileListString );
 }
 
+void EmailAll::on_personalize_currentTextChanged()
+{
+    QString text = "[" + ui->personalize->currentText() + "] ";
+    if(!ui->personalize->currentText().isEmpty()){
+        ui->message_edit->insertPlainText(text);
+        ui->message_edit->setFocus();
+    }
+}
+
+void EmailAll::show_status(const QString &message)
+{
+    bar->showMessage(message);
+}
+
+void EmailAll::on_cancel_button_clicked()
+{
+    close();
+}
 
 void EmailAll::on_send_button_clicked()
 {
-    customize_email();
-}
-
-void EmailAll::mailSent(QString status)
-{
-    if(status == "Message sent")
-        QMessageBox::warning( 0, tr( "Qt Simple SMTP client" ), tr( "Message sent!\n\n" ) );
+    send_email();
 }
 
 void EmailAll::on_browse_button_clicked()

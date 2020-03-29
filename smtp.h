@@ -40,7 +40,8 @@ public:
                    QStringList files = QStringList());
 
 signals:
-    void status( const QString &);
+
+    void send_status(QString);
 
 private slots:
     void stateChanged(QAbstractSocket::SocketState socketState);
@@ -50,17 +51,17 @@ private slots:
     void readyRead();
 
 private:
-    int timeout;
     QString message;
     QTextStream *t;
     QSslSocket *socket;
     QString from;
     QString rcpt;
     QString response;
-    QString user;
-    QString pass;
     QString host;
+    QString user;
+    QString pass;    
     int port;
+    int timeout;
     enum states{Tls, HandShake ,Auth,User,Pass,Rcpt,Mail,Data,Init,Body,Quit,Close};
     int state;
 

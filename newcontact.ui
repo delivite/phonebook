@@ -131,11 +131,7 @@
       </widget>
      </item>
      <item row="5" column="1">
-      <widget class="QLineEdit" name="remember_edit">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
+      <widget class="QLineEdit" name="remember_edit"/>
      </item>
     </layout>
    </item>

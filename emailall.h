@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include <QFileDialog>
+#include <QStatusBar>
+
 
 #include "datastore.h"
 
@@ -18,14 +20,18 @@ public:
     explicit EmailAll(QWidget *parent = nullptr);
     ~EmailAll();
 
+signals:
+    void show_parent();
+
+public slots:
+    void show_status(const QString &);
+
 private slots:
     void on_cancel_button_clicked();
 
-    void on_personalize_currentTextChanged(/*const QString &arg1*/);
+    void on_personalize_currentTextChanged();
 
     void on_send_button_clicked();
-
-    void mailSent(QString);
 
     void on_browse_button_clicked();
 
@@ -33,12 +39,12 @@ private:
     Ui::EmailAll *ui;
     DataStore d;
     QStringList files;
+    QStatusBar *bar;
 
     void list_all_contacts();
-    void personalize_combo();
-    void customize_email();
-    void replace_personalizers(QString &source, int i);
-    void sendMail();
+    void populate_combo();
+    void send_email();
+    void personalize(QString &source, int i);
     void browse();
 };
 

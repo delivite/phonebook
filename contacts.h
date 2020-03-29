@@ -29,6 +29,8 @@ public slots:
 
     void edit_data(QString name, long long phone, QString email, QString job, QString meeting);
 
+    void show_me();
+
 private slots:
     void on_new_contact_clicked();
 

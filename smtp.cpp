@@ -13,29 +13,30 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 #include "smtp.h"
 
-Smtp::Smtp( const QString &user, const QString &pass, const QString &host, int port, int timeout )
+#include <iostream>
+
+Smtp::Smtp( const QString &user, const QString &pass, const QString &host, int port, int timeout ): host(host), user(user), pass(pass),  port(port), timeout(timeout)
 {    
     socket = new QSslSocket(this);
 
     connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
     connect(socket, SIGNAL(connected()), this, SLOT(connected() ) );
-    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this,SLOT(errorReceived(QAbstractSocket::SocketError)));   
+    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(errorReceived(QAbstractSocket::SocketError)));
     connect(socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(stateChanged(QAbstractSocket::SocketState)));
-    connect(socket, SIGNAL(disconnected()), this,SLOT(disconnected()));
+    connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
 
 
-    this->user = user;
-    this->pass = pass;
 
-    this->host = host;
-    this->port = port;
-    this->timeout = timeout;
+    //this->user = user;
+    //this->pass = pass;
 
-
+    //this->host = host;
+    //this->port = port;
+    //this->timeout = timeout;
 }
 
 void Smtp::sendMail(const QString &from, const QString &to, const QString &subject, const QString &body, QStringList files)
-{
+{    
     message = "To: " + to + "\n";    
     message.append("From: " + from + "\n");
     message.append("Subject: " + subject + "\n");
@@ -43,8 +44,6 @@ void Smtp::sendMail(const QString &from, const QString &to, const QString &subje
     //Let's intitiate multipart MIME with cutting boundary "frontier"
     message.append("MIME-Version: 1.0\n");
     message.append("Content-Type: multipart/mixed; boundary=frontier\n\n");
-
-
 
     message.append( "--frontier\n" );
     //message.append( "Content-Type: text/html\n\n" );  //Uncomment this for HTML formating, coment the line below
@@ -54,6 +53,7 @@ void Smtp::sendMail(const QString &from, const QString &to, const QString &subje
 
     if(!files.isEmpty())
     {
+        emit send_status("Files to be sent: " + QString::number(files.size()));
         qDebug() << "Files to be sent: " << files.size();
         foreach(QString filePath, files)
         {
@@ -62,6 +62,7 @@ void Smtp::sendMail(const QString &from, const QString &to, const QString &subje
             {
                 if (!file.open(QIODevice::ReadOnly))
                 {
+                    emit send_status("Cannot open attached file");
                     qDebug("Couldn't open the file");
                     QMessageBox::warning( 0, tr( "Qt Simple SMTP client" ), tr( "Couldn't open the file\n\n" )  );
                         return ;
@@ -75,7 +76,8 @@ void Smtp::sendMail(const QString &from, const QString &to, const QString &subje
         }
     }
     else
-        qDebug() << "No attachments found";
+        emit send_status("No attachements found.");
+
 
 
     message.append( "--frontier--\n" );
@@ -89,23 +91,24 @@ void Smtp::sendMail(const QString &from, const QString &to, const QString &subje
     state = Init;
     socket->connectToHostEncrypted(host, port); //"smtp.gmail.com" and 465 for gmail TLS
     if (!socket->waitForConnected(timeout)) {
+        emit send_status(socket->errorString());
          qDebug() << socket->errorString();
      }
 
     t = new QTextStream( socket );
 
-
-
 }
+
 
 Smtp::~Smtp()
 {
     delete t;
     delete socket;
 }
+
+
 void Smtp::stateChanged(QAbstractSocket::SocketState socketState)
 {
-
     qDebug() <<"stateChanged " << socketState;
 }
 
@@ -116,19 +119,19 @@ void Smtp::errorReceived(QAbstractSocket::SocketError socketError)
 
 void Smtp::disconnected()
 {
-
+    //emit send_status("Disconnected \t " + socket->errorString());
     qDebug() <<"disconneted";
     qDebug() << "error "  << socket->errorString();
 }
 
 void Smtp::connected()
 {    
+    emit send_status("Connected");
     qDebug() << "Connected ";
 }
 
 void Smtp::readyRead()
 {
-
      qDebug() <<"readyRead";
     // SMTP is line-oriented
 
@@ -167,10 +170,10 @@ void Smtp::readyRead()
         socket->startClientEncryption();
         if(!socket->waitForEncrypted(timeout))
         {
+            emit send_status(socket->errorString());
             qDebug() << socket->errorString();
             state = Close;
         }
-
 
         //Send EHLO once again but now encrypted
 
@@ -225,7 +228,6 @@ void Smtp::readyRead()
     }
     else if ( state == Data && responseLine == "250" )
     {
-
         *t << "DATA\r\n";
         t->flush();
         state = Body;
@@ -244,7 +246,7 @@ void Smtp::readyRead()
         t->flush();
         // here, we just close.
         state = Close;
-        emit status( tr( "Message sent" ) );
+        emit send_status( "Message sent to " + rcpt );
     }
     else if ( state == Close )
     {
@@ -256,7 +258,7 @@ void Smtp::readyRead()
         // something broke.
         QMessageBox::warning( 0, tr( "Qt Simple SMTP client" ), tr( "Unexpected reply from SMTP server:\n\n" ) + response );
         state = Close;
-        emit status( tr( "Failed to send message" ) );
+        emit send_status( tr( "Failed to send message" ) );
     }
     response = "";
 }
