@@ -15,8 +15,10 @@ EmailAll::EmailAll(QWidget *parent) :
 
     bar = new QStatusBar(this);
     ui->status_layout->addWidget(bar);
-
     bar->showMessage("Ready! Click on Add Personalization bar to add a personal touch.");
+
+    get_smtp_details();
+
     list_all_contacts();
     populate_combo();
 }
@@ -65,7 +67,7 @@ void EmailAll::send_email()
             personalize(message_text, i);
 
             //Send email
-            Smtp* smtp = new Smtp("sampinn316@gmail.com", "D3l1v1t3", "smtp.gmail.com", 465);
+            Smtp* smtp = new Smtp(username, password, server, port);
             connect(smtp, &Smtp::send_status, this, &EmailAll::show_status);
 
             if( !files.isEmpty() )
@@ -113,6 +115,26 @@ void EmailAll::browse()
         fileListString.append( "\"" + QFileInfo(file).fileName() + "\" " );
 
     ui->file->setText( fileListString );
+}
+
+void EmailAll::get_smtp_details()
+{
+    QFile file("smtpdata.csv");
+    QTextStream stream(&file);
+    if(file.exists()){
+        if(file.open(QFile::ReadOnly)){
+
+            while (!stream.atEnd()){
+                const QStringList data_line { stream.readLine().split(';') };
+                this->server = data_line[0];
+                this->port = data_line[1].toInt();
+                this->username = data_line[2];
+                this->password = data_line[3];
+            }
+            file.close();
+        }
+    }else
+        QMessageBox::critical(this, "Error", "Can't find the credentials", QMessageBox::Ok);
 }
 
 void EmailAll::on_personalize_currentTextChanged()

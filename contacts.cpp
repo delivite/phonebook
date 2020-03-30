@@ -9,6 +9,7 @@
 #include "newcontact.h"
 #include "person.h"
 #include "emailall.h"
+#include "smtpsettings.h"
 
 
 Contacts::Contacts(QWidget *parent)
@@ -45,9 +46,8 @@ void Contacts::save_data(QString name, long long phone, QString email, QString j
         }
     }else{
         store.phonebook.insert(std::pair<QString, Person>(name, Person(name, phone, email, job, meeting, remember)));
-        QMessageBox::information(this, "Success", "Saved!", QMessageBox::Ok);
-
         list_insert(name);
+        QMessageBox::information(this, "Success", "Saved!", QMessageBox::Ok);
     }
 }
 
@@ -243,9 +243,23 @@ void Contacts::on_actionNew_Contact_triggered()
 
 void Contacts::on_pushButton_3_clicked()
 {
-    EmailAll emailAll;
-    connect(&emailAll, &EmailAll::show_parent, this, &Contacts::show_me);
-    this->hide();
-    emailAll.setModal(true);
-    emailAll.exec();
+    QFile file("smtpdata.csv");
+    QTextStream stream(&file);
+    if(!file.exists()){
+        on_actionSMTP_Settings_triggered();
+    }else
+    {
+        EmailAll emailAll;
+        connect(&emailAll, &EmailAll::show_parent, this, &Contacts::show_me);
+        this->hide();
+        emailAll.setModal(true);
+        emailAll.exec();
+    }
+}
+
+void Contacts::on_actionSMTP_Settings_triggered()
+{
+    SmtpSettings settings;
+    settings.setModal(true);
+    settings.exec();
 }

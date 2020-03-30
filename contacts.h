@@ -54,6 +54,8 @@ private slots:
 
     void on_pushButton_3_clicked();
 
+    void on_actionSMTP_Settings_triggered();
+
 private:
     Ui::Contacts *ui;
     DataStore store;

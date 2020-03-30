@@ -466,8 +466,15 @@ color: rgb(255, 255, 255);</string>
     <addaction name="separator"/>
     <addaction name="actionEmail_All_Contacts"/>
    </widget>
+   <widget class="QMenu" name="menuSettings">
+    <property name="title">
+     <string>Settings</string>
+    </property>
+    <addaction name="actionSMTP_Settings"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEmail_All_Contacts"/>
+   <addaction name="menuSettings"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNew_Contact">
@@ -483,6 +490,11 @@ color: rgb(255, 255, 255);</string>
   <action name="actionEmail_All_Contacts">
    <property name="text">
     <string>Email All Contacts</string>
+   </property>
+  </action>
+  <action name="actionSMTP_Settings">
+   <property name="text">
+    <string>SMTP Settings</string>
    </property>
   </action>
  </widget>

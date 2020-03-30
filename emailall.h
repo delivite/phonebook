@@ -40,12 +40,15 @@ private:
     DataStore d;
     QStringList files;
     QStatusBar *bar;
+    QString server, username, password;
+    int port{};
 
     void list_all_contacts();
     void populate_combo();
     void send_email();
     void personalize(QString &source, int i);
     void browse();
+    void get_smtp_details();
 };
 
 #endif // EMAILALL_H

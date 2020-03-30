@@ -23,7 +23,8 @@ SOURCES += \
     contacts.cpp \
     newcontact.cpp \
     person.cpp \
-    smtp.cpp
+    smtp.cpp \
+    smtpsettings.cpp
 
 HEADERS += \
     contacts.h \
@@ -32,13 +33,15 @@ HEADERS += \
     emailall.h \
     newcontact.h \
     person.h \
-    smtp.h
+    smtp.h \
+    smtpsettings.h
 
 FORMS += \
     contacts.ui \
     editcontact.ui \
     emailall.ui \
-    newcontact.ui
+    newcontact.ui \
+    smtpsettings.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
