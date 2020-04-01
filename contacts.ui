@@ -34,13 +34,9 @@
        <widget class="QPushButton" name="new_contact">
         <property name="font">
          <font>
-          <weight>75</weight>
-          <bold>true</bold>
+          <weight>50</weight>
+          <bold>false</bold>
          </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(0, 170, 0);
-color: rgb(255, 255, 255);</string>
         </property>
         <property name="text">
          <string>New Contact</string>
@@ -51,13 +47,9 @@ color: rgb(255, 255, 255);</string>
        <widget class="QPushButton" name="edit_contact">
         <property name="font">
          <font>
-          <weight>75</weight>
-          <bold>true</bold>
+          <weight>50</weight>
+          <bold>false</bold>
          </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(0, 170, 0);
-color: rgb(255, 255, 255);</string>
         </property>
         <property name="text">
          <string>Edit Contact</string>
@@ -65,49 +57,36 @@ color: rgb(255, 255, 255);</string>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="delete_contact">
-        <property name="font">
-         <font>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(0, 170, 0);
-color: rgb(255, 255, 255);</string>
-        </property>
+       <widget class="QPushButton" name="email_button">
         <property name="text">
-         <string>Delete Contact</string>
+         <string>Email Contact</string>
         </property>
        </widget>
-      </item>
-      <item>
-       <spacer name="verticalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
       </item>
       <item>
        <widget class="QPushButton" name="pushButton_3">
         <property name="font">
          <font>
-          <weight>75</weight>
-          <bold>true</bold>
+          <weight>50</weight>
+          <bold>false</bold>
+          <kerning>true</kerning>
          </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(0, 170, 0);
-color: rgb(255, 255, 255);</string>
         </property>
         <property name="text">
          <string>Email All Contacts</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="delete_contact">
+        <property name="font">
+         <font>
+          <weight>50</weight>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Delete Contact</string>
         </property>
        </widget>
       </item>
@@ -267,29 +246,6 @@ font: italic 12pt &quot;Calibri&quot;;</string>
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_2">
-              <property name="maximumSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="resources.qrc">
-                <normaloff>:/img/MetroUI-Other-Phone-Alt-icon.png</normaloff>:/img/MetroUI-Other-Phone-Alt-icon.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>50</width>
-                <height>50</height>
-               </size>
-              </property>
-             </widget>
-            </item>
            </layout>
           </item>
           <item>
@@ -304,6 +260,29 @@ font: italic 12pt &quot;Calibri&quot;;</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="call_button">
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resources.qrc">
+                <normaloff>:/img/Actions-skype-contact-online-icon.png</normaloff>:/img/Actions-skype-contact-online-icon.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>50</width>
+                <height>50</height>
+               </size>
               </property>
              </widget>
             </item>

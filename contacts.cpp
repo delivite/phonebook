@@ -213,8 +213,7 @@ void Contacts::on_listWidget_itemSelectionChanged()
 
 void Contacts::on_pushButton_clicked()
 {
-    QString email = store.get_email(ui->listWidget->currentItem()->text());
-    QDesktopServices::openUrl(QUrl("mailto:" + email, QUrl::TolerantMode));
+    on_email_button_clicked();
 }
 
 
@@ -262,4 +261,18 @@ void Contacts::on_actionSMTP_Settings_triggered()
     SmtpSettings settings;
     settings.setModal(true);
     settings.exec();
+}
+
+void Contacts::on_call_button_clicked()
+{
+    QString key = ui->listWidget->currentItem()->text();
+    QString skype_id = store.get_email(key);
+    QString launch_skype = "skype:" + skype_id + "?call";
+    QDesktopServices::openUrl(QUrl(launch_skype));
+}
+
+void Contacts::on_email_button_clicked()
+{
+    QString email = store.get_email(ui->listWidget->currentItem()->text());
+    QDesktopServices::openUrl(QUrl("mailto:" + email, QUrl::TolerantMode));
 }
